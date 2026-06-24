@@ -9,10 +9,10 @@
 
 3.点击 新增 按钮，可新增标点
 
-<img width="484" height="795" alt="image" src="https://github.com/user-attachments/assets/f65feddd-8dcf-422d-a777-5ec13c38995d" />
+<img width="242" height="397" alt="image" src="https://github.com/user-attachments/assets/f65feddd-8dcf-422d-a777-5ec13c38995d" />
 
 4.选中不需要的标点后，点击删除按钮即可删除
 
-<img width="481" height="795" alt="12214abd5bad610e23a05a5581b93cd4" src="https://github.com/user-attachments/assets/663af63c-4a34-40fa-a847-af45ec2ac391" />
+<img width="240" height="397" alt="12214abd5bad610e23a05a5581b93cd4" src="https://github.com/user-attachments/assets/663af63c-4a34-40fa-a847-af45ec2ac391" />
 
 5.点击需要输入的文本框，双击LabelPlusMark中需要的标点，即可输入。

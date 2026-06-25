@@ -16,7 +16,7 @@ namespace LabelPlusMark
         private const int WS_EX_NOACTIVATE = 0x08000000;
         private const int WM_MOUSEACTIVATE = 0x0021;
         private const int MA_NOACTIVATE = 3;
-        private string FilePath = "symbols.txt";
+        private string DefaultFilePath = "symbols.txt";
         public main()
         {
             InitializeComponent();
@@ -24,11 +24,12 @@ namespace LabelPlusMark
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
-            LoadSymbols();// 加载符号列表
+            LoadSymbols(DefaultFilePath);// 加载符号列表
 
-            listBox1.DoubleClick += listView1_SelectedIndexChanged;// 双击事件
+            listBox1.MouseDoubleClick += listView1_SelectedIndexChanged;// 双击事件
             button1.Click += button1_Click;// 点击事件
-            button2.Click += button2_Click;
+            button2.Click += button2_Click;// 删除事件
+            //button3.Click += button3_Click;// 选择文件导入
         }
 /*********************窗体最上层******************************************************/
         // 窗口显示时不抢焦点
@@ -61,13 +62,13 @@ namespace LabelPlusMark
         }
         /*********************窗体最上层******************************************************/
 
-        private void LoadSymbols()
+        private void LoadSymbols(string filePath)
         {
             listBox1.Items.Clear();
 
-            if (File.Exists(FilePath))
+            if (File.Exists(filePath))
             {
-                string[] lines = File.ReadAllLines(FilePath);
+                string[] lines = File.ReadAllLines(filePath);
 
                 foreach (string line in lines)
                 {
@@ -92,7 +93,7 @@ namespace LabelPlusMark
                 symbols[i] = listBox1.Items[i].ToString();
             }
 
-            File.WriteAllLines(FilePath, symbols);
+            File.WriteAllLines(DefaultFilePath, symbols);
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -145,17 +146,53 @@ namespace LabelPlusMark
 
             SaveSymbols();
         }
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void button3_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem == null)
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Title = "选择符号文件";
+            openFileDialog.Filter = "文本文件 (*.txt)|*.txt|所有文件 (*.*)|*.*";
+            openFileDialog.Multiselect = false;
+
+            DialogResult result = openFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                DefaultFilePath = openFileDialog.FileName;
+
+                label1.Text = Path.GetFileName(DefaultFilePath);
+
+                LoadSymbols(DefaultFilePath);
+            }
+        }
+        private void listView1_SelectedIndexChanged(object sender, MouseEventArgs e)
+        {
+            int index = listBox1.IndexFromPoint(e.Location);
+
+            // 双击空白区域，不执行复制
+            if (index == ListBox.NoMatches)
             {
                 return;
             }
 
-            string text = listBox1.SelectedItem.ToString();
+            // 选中鼠标双击的那一项
+            listBox1.SelectedIndex = index;
+
+            string text = listBox1.Items[index].ToString();
 
             Clipboard.SetText(text);
             SendKeys.SendWait("^v");
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
